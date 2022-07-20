@@ -5,10 +5,7 @@ package com.example.springsecmeta.domain;
  */
 
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Entity;
@@ -22,6 +19,7 @@ import java.util.*;
 @Entity
 @ToString
 @Data
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -42,4 +40,16 @@ public class User {
 
     @CreationTimestamp
     private Timestamp createDate;
+
+    @Builder
+    public User(String username, String password, String email, String role, String provider, String providerId) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
+
+
 }

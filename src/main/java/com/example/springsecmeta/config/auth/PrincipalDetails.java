@@ -6,8 +6,10 @@ package com.example.springsecmeta.config.auth;
 
 
 import com.example.springsecmeta.domain.User;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.*;
 
@@ -20,14 +22,33 @@ import java.util.*;
 // Security Session -> Authentication -> UserDetails
 
 
-public class PrincipalDetails implements UserDetails {
+// UserDetails class : Form 로그인 시 사용함.
+// OAuth2User class  : OAuth 로그인 시 사용함.
+
+// Form로그인과 OAuth로그인의 로직을 따로 처리하면 코드가 길어지기 때문에 두개를 상속받아서
+// Form로그인과 OAuth로그인 방식을 동시에 처리할 수 있도록 두 클래스를 implements한 PrincipalDetails 클래스를 만듦.
+@Data
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user;
+    private Map<String, Object> attributes;
 
+    // 일반 로그인할 때 호출되는 생성자.
     public PrincipalDetails(User user) {
         this.user = user;
     }
 
+    //OAuth 로그인할 때 호출되는 생성자.
+    public PrincipalDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
+    }
+
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return this.attributes;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -76,5 +97,10 @@ public class PrincipalDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return this.attributes.get("sub").toString();
     }
 }

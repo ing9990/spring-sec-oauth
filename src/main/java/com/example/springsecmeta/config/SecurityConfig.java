@@ -18,7 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 // secured Annotaion 활성화 = true, preAuthorize Annotation 활성화 = true, postAuthorize Annotation 활성화
 
@@ -51,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
 
-                
+
                 // OAUTH CLIENT를 사용한 구글 로그인
                 .oauth2Login()
                 .loginPage("/loginForm")
